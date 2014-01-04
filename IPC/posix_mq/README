@@ -1,0 +1,10 @@
+man 7 mq_overview
+run following command as root
+mkdir /dev/mqueue
+mount -t mqueue none /dev/mqueue
+
+cat /dev/mqueue/mymq
+
+./mq_send
+./mq_recv 
+./mq_remove will remove mq from /dev/mqueue
