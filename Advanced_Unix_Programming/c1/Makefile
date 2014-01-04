@@ -22,7 +22,7 @@
 defaulttarget: all
 # Following must be defined in the environment before you run make:
 #
-#	OS = SOLARIS or LINUX or FREEBSD
+#	OS = SOLARIS or LINUX or FREEBSD or HPUX
 #	LIBS = regular (non-thread) libraries (eg, "-lncurses -lutil")
 #	TLIBS = thread libraries (eg, "-llthread -llgcc_r")
 #	PTHREADSTUB = stub for thread functions (eg, pthreadstub.o), if needed
@@ -46,97 +46,105 @@ defaulttarget: all
 #			OS=LINUX
 #			LIBS="-lncurses -lutil"
 #			TLIBS="-pthread"
-CFLAGS = $(INCLUDES) -I$(AUPSRC)/include -I$(AUPSRC)/common -I$(AUPSRC)/c6 -Wimplicit -Wstrict-prototypes -Wall -D$(OS) -D_REENTRANT -D_THREAD_SAFE
+#
+#		HPUX:
+#			OS=HPUX
+#			LIBS="-lcurses"
+#			TLIBS="-lpthread" (not yet checked out)
+# Options below (e.g., -Wimplicit) are for gcc mostly. You will have to modify them for a non-gcc compiler.
+CFLAGS = $(INCLUDES) -I$(AUPSRC) -I$(AUPSRC)/include -I$(AUPSRC)/common -I$(AUPSRC)/c6 -Wimplicit -Wstrict-prototypes -Wall -D$(OS) -D_REENTRANT -D_THREAD_SAFE -std=c99
 CC = gcc
+CCPP = g++
+CCLINK = gcc
 # Same objects are used all the time, sometimes linking in unnecessary files.
 AUPOBJS = syserr.o time.o extio.o getblksize.o setblock.o ec.o logf.o options.o macrostr.o
 
 mms: mkmacrostr.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o mms mkmacrostr.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o mms mkmacrostr.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 #############################################
 # Utility to build macro-string program
 #############################################
 macrostr.o: $(AUPSRC)/common/macrostr.c $(AUPSRC)/common/macrostr.incl
-	$(CC) $(CFLAGS) -c  -o $*.o $(AUPSRC)/common/macrostr.c
+	$(CC) $(CFLAGS) -c  -o macrostr.o $(AUPSRC)/common/macrostr.c
 
-mkmacrostr.o: /aup/common/mkmacrostr.c
-	$(CC) $(CFLAGS)  -c -o mkmacrostr.o /aup/common/mkmacrostr.c
+setblock.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c4/setblock.c
+	$(CC) $(CFLAGS)  -c -o setblock.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c4/setblock.c
 
-options.o: /aup/common/options.c
-	$(CC) $(CFLAGS)  -c -o options.o /aup/common/options.c
+logf.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/logf.c
+	$(CC) $(CFLAGS)  -c -o logf.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/logf.c
 
-pthreadstub.o: /aup/common/pthreadstub.c
-	$(CC) $(CFLAGS)  -c -o pthreadstub.o /aup/common/pthreadstub.c
+extio.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/extio.c
+	$(CC) $(CFLAGS)  -c -o extio.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/extio.c
 
-ec.o: /aup/common/ec.c
-	$(CC) $(CFLAGS)  -c -o ec.o /aup/common/ec.c
+getblksize.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/getblksize.c
+	$(CC) $(CFLAGS)  -c -o getblksize.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/getblksize.c
 
-logf.o: /aup/common/logf.c
-	$(CC) $(CFLAGS)  -c -o logf.o /aup/common/logf.c
+ec.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/ec.c
+	$(CC) $(CFLAGS)  -c -o ec.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/ec.c
 
-setblock.o: /aup/c4/setblock.c
-	$(CC) $(CFLAGS)  -c -o setblock.o /aup/c4/setblock.c
+mkmacrostr.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/mkmacrostr.c
+	$(CC) $(CFLAGS)  -c -o mkmacrostr.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/mkmacrostr.c
 
-extio.o: /aup/c2/extio.c
-	$(CC) $(CFLAGS)  -c -o extio.o /aup/c2/extio.c
+syserr.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/syserr.c
+	$(CC) $(CFLAGS)  -c -o syserr.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/syserr.c
 
-syserr.o: /aup/c1/syserr.c
-	$(CC) $(CFLAGS)  -c -o syserr.o /aup/c1/syserr.c
+time.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/time.c
+	$(CC) $(CFLAGS)  -c -o time.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/time.c
 
-time.o: /aup/c1/time.c
-	$(CC) $(CFLAGS)  -c -o time.o /aup/c1/time.c
+pthreadstub.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/pthreadstub.c
+	$(CC) $(CFLAGS)  -c -o pthreadstub.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/pthreadstub.c
 
-getblksize.o: /aup/c2/getblksize.c
-	$(CC) $(CFLAGS)  -c -o getblksize.o /aup/c2/getblksize.c
+options.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/options.c
+	$(CC) $(CFLAGS)  -c -o options.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/options.c
 
 ckstdvers: ckstdvers.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o ckstdvers ckstdvers.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o ckstdvers ckstdvers.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 ckvers: ckvers.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o ckvers ckvers.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o ckvers ckvers.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 err: errorhandling.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o err errorhandling.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o err errorhandling.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 opttest: opttest.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o opttest opttest.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o opttest opttest.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 suvreq: suvreq.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o suvreq suvreq.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o suvreq suvreq.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sysconf: sysconf.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sysconf sysconf.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sysconf sysconf.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 timetst: timetst.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o timetst timetst.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o timetst timetst.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 version: version.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o version version.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o version version.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
-ckvers.o: /aup/c1/ckvers.c
-	$(CC) $(CFLAGS) -DCKVERS_UNIX98 -c -o ckvers.o /aup/c1/ckvers.c
+errorhandling.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/errorhandling.c
+	$(CC) $(CFLAGS)  -c -o errorhandling.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/errorhandling.c
 
-version.o: /aup/c1/version.c
-	$(CC) $(CFLAGS)  -c -o version.o /aup/c1/version.c
+opttest.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/opttest.c
+	$(CC) $(CFLAGS)  -c -o opttest.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/opttest.c
 
-timetst.o: /aup/c1/timetst.c
-	$(CC) $(CFLAGS)  -c -o timetst.o /aup/c1/timetst.c
+sysconf.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/sysconf.c
+	$(CC) $(CFLAGS)  -c -o sysconf.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/sysconf.c
 
-sysconf.o: /aup/c1/sysconf.c
-	$(CC) $(CFLAGS)  -c -o sysconf.o /aup/c1/sysconf.c
+suvreq.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/suvreq.c
+	$(CC) $(CFLAGS) -DCKVERS_UNIX98x -c -o suvreq.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/suvreq.c
 
-errorhandling.o: /aup/c1/errorhandling.c
-	$(CC) $(CFLAGS)  -c -o errorhandling.o /aup/c1/errorhandling.c
+version.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/version.c
+	$(CC) $(CFLAGS)  -c -o version.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/version.c
 
-ckstdvers.o: /aup/c1/ckstdvers.c
-	$(CC) $(CFLAGS)  -c -o ckstdvers.o /aup/c1/ckstdvers.c
+timetst.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/timetst.c
+	$(CC) $(CFLAGS)  -c -o timetst.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/timetst.c
 
-opttest.o: /aup/c1/opttest.c
-	$(CC) $(CFLAGS)  -c -o opttest.o /aup/c1/opttest.c
+ckvers.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/ckvers.c
+	$(CC) $(CFLAGS) -DCKVERS_UNIX98 -c -o ckvers.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/ckvers.c
 
-suvreq.o: /aup/c1/suvreq.c
-	$(CC) $(CFLAGS) -DCKVERS_UNIX98x -c -o suvreq.o /aup/c1/suvreq.c
+ckstdvers.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/ckstdvers.c
+	$(CC) $(CFLAGS)  -c -o ckstdvers.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/ckstdvers.c
 
-all:  opttest timetst err version ckvers sysconf ckstdvers suvreq
+all:  sysconf opttest ckvers version ckstdvers suvreq timetst err
 clean:
-	rm  opttest timetst err version ckvers sysconf ckstdvers suvreq *.o
+	rm  sysconf opttest ckvers version ckstdvers suvreq timetst err *.o

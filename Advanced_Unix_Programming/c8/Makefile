@@ -22,7 +22,7 @@
 defaulttarget: all
 # Following must be defined in the environment before you run make:
 #
-#	OS = SOLARIS or LINUX or FREEBSD
+#	OS = SOLARIS or LINUX or FREEBSD or HPUX
 #	LIBS = regular (non-thread) libraries (eg, "-lncurses -lutil")
 #	TLIBS = thread libraries (eg, "-llthread -llgcc_r")
 #	PTHREADSTUB = stub for thread functions (eg, pthreadstub.o), if needed
@@ -46,148 +46,156 @@ defaulttarget: all
 #			OS=LINUX
 #			LIBS="-lncurses -lutil"
 #			TLIBS="-pthread"
-CFLAGS = $(INCLUDES) -I$(AUPSRC)/include -I$(AUPSRC)/common -I$(AUPSRC)/c6 -Wimplicit -Wstrict-prototypes -Wall -D$(OS) -D_REENTRANT -D_THREAD_SAFE
+#
+#		HPUX:
+#			OS=HPUX
+#			LIBS="-lcurses"
+#			TLIBS="-lpthread" (not yet checked out)
+# Options below (e.g., -Wimplicit) are for gcc mostly. You will have to modify them for a non-gcc compiler.
+CFLAGS = $(INCLUDES) -I$(AUPSRC) -I$(AUPSRC)/include -I$(AUPSRC)/common -I$(AUPSRC)/c6 -Wimplicit -Wstrict-prototypes -Wall -D$(OS) -D_REENTRANT -D_THREAD_SAFE -std=c99
 CC = gcc
+CCPP = g++
+CCLINK = gcc
 # Same objects are used all the time, sometimes linking in unnecessary files.
 AUPOBJS = syserr.o time.o extio.o getblksize.o setblock.o ec.o logf.o options.o macrostr.o
 
 mms: mkmacrostr.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o mms mkmacrostr.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o mms mkmacrostr.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 #############################################
 # Utility to build macro-string program
 #############################################
 macrostr.o: $(AUPSRC)/common/macrostr.c $(AUPSRC)/common/macrostr.incl
-	$(CC) $(CFLAGS) -c  -o $*.o $(AUPSRC)/common/macrostr.c
+	$(CC) $(CFLAGS) -c  -o macrostr.o $(AUPSRC)/common/macrostr.c
 
-mkmacrostr.o: /aup/common/mkmacrostr.c
-	$(CC) $(CFLAGS)  -c -o mkmacrostr.o /aup/common/mkmacrostr.c
+setblock.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c4/setblock.c
+	$(CC) $(CFLAGS)  -c -o setblock.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c4/setblock.c
 
-options.o: /aup/common/options.c
-	$(CC) $(CFLAGS)  -c -o options.o /aup/common/options.c
+logf.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/logf.c
+	$(CC) $(CFLAGS)  -c -o logf.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/logf.c
 
-pthreadstub.o: /aup/common/pthreadstub.c
-	$(CC) $(CFLAGS)  -c -o pthreadstub.o /aup/common/pthreadstub.c
+extio.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/extio.c
+	$(CC) $(CFLAGS)  -c -o extio.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/extio.c
 
-ec.o: /aup/common/ec.c
-	$(CC) $(CFLAGS)  -c -o ec.o /aup/common/ec.c
+getblksize.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/getblksize.c
+	$(CC) $(CFLAGS)  -c -o getblksize.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c2/getblksize.c
 
-logf.o: /aup/common/logf.c
-	$(CC) $(CFLAGS)  -c -o logf.o /aup/common/logf.c
+ec.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/ec.c
+	$(CC) $(CFLAGS)  -c -o ec.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/ec.c
 
-setblock.o: /aup/c4/setblock.c
-	$(CC) $(CFLAGS)  -c -o setblock.o /aup/c4/setblock.c
+mkmacrostr.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/mkmacrostr.c
+	$(CC) $(CFLAGS)  -c -o mkmacrostr.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/mkmacrostr.c
 
-extio.o: /aup/c2/extio.c
-	$(CC) $(CFLAGS)  -c -o extio.o /aup/c2/extio.c
+syserr.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/syserr.c
+	$(CC) $(CFLAGS)  -c -o syserr.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/syserr.c
 
-syserr.o: /aup/c1/syserr.c
-	$(CC) $(CFLAGS)  -c -o syserr.o /aup/c1/syserr.c
+time.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/time.c
+	$(CC) $(CFLAGS)  -c -o time.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c1/time.c
 
-time.o: /aup/c1/time.c
-	$(CC) $(CFLAGS)  -c -o time.o /aup/c1/time.c
+pthreadstub.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/pthreadstub.c
+	$(CC) $(CFLAGS)  -c -o pthreadstub.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/pthreadstub.c
 
-getblksize.o: /aup/c2/getblksize.c
-	$(CC) $(CFLAGS)  -c -o getblksize.o /aup/c2/getblksize.c
+options.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/options.c
+	$(CC) $(CFLAGS)  -c -o options.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/common/options.c
 
 adi: adi.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o adi adi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o adi adi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 br: br.o ssi.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o br br.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o br br.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 byteorder: byteorder.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o byteorder byteorder.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o byteorder byteorder.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 minibr: minibr.o ssi.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o minibr minibr.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o minibr minibr.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 miniws: miniws.o ssi.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o miniws miniws.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o miniws miniws.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 ndb: ndb.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o ndb ndb.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o ndb ndb.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 protoent: protoent.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o protoent protoent.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o protoent protoent.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sktcl: sktcl.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sktcl sktcl.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sktcl sktcl.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sktex: sktex.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sktex sktex.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sktex sktex.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sktexdg: sktexdg.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sktexdg sktexdg.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sktexdg sktexdg.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sktexdgmult: sktexdgmult.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sktexdgmult sktexdgmult.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sktexdgmult sktexdgmult.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sktexdgmultmsg: sktexdgmultmsg.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sktexdgmultmsg sktexdgmultmsg.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sktexdgmultmsg sktexdgmultmsg.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sktexm: sktexm.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sktexm sktexm.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sktexm sktexm.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 sktopt: sktopt.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o sktopt sktopt.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o sktopt sktopt.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 aupuname: uname.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o aupuname uname.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o aupuname uname.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
 ws: ws.o ssi.o $(AUPOBJS) $(PTHREADSTUB)
-	$(CC) -o ws ws.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
+	$(CCLINK) -o ws ws.o ssi.o $(AUPOBJS) $(LIBS) $(PTHREADSTUB)
 
-ws.o: /aup/c8/ws.c
-	$(CC) $(CFLAGS)  -c -o ws.o /aup/c8/ws.c
+minibr.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/minibr.c
+	$(CC) $(CFLAGS)  -c -o minibr.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/minibr.c
 
-minibr.o: /aup/c8/minibr.c
-	$(CC) $(CFLAGS)  -c -o minibr.o /aup/c8/minibr.c
+miniws.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/miniws.c
+	$(CC) $(CFLAGS)  -c -o miniws.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/miniws.c
 
-adi.o: /aup/c8/adi.c
-	$(CC) $(CFLAGS)  -c -o adi.o /aup/c8/adi.c
+sktopt.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktopt.c
+	$(CC) $(CFLAGS)  -c -o sktopt.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktopt.c
 
-sktexdgmult.o: /aup/c8/sktexdgmult.c
-	$(CC) $(CFLAGS)  -c -o sktexdgmult.o /aup/c8/sktexdgmult.c
+sktexdgmult.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexdgmult.c
+	$(CC) $(CFLAGS)  -c -o sktexdgmult.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexdgmult.c
 
-sktexm.o: /aup/c8/sktexm.c
-	$(CC) $(CFLAGS)  -c -o sktexm.o /aup/c8/sktexm.c
+ndb.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/ndb.c
+	$(CC) $(CFLAGS)  -c -o ndb.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/ndb.c
 
-ndb.o: /aup/c8/ndb.c
-	$(CC) $(CFLAGS)  -c -o ndb.o /aup/c8/ndb.c
+br.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/br.c
+	$(CC) $(CFLAGS)  -c -o br.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/br.c
 
-sktexdgmultmsg.o: /aup/c8/sktexdgmultmsg.c
-	$(CC) $(CFLAGS)  -c -o sktexdgmultmsg.o /aup/c8/sktexdgmultmsg.c
+ws.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/ws.c
+	$(CC) $(CFLAGS)  -c -o ws.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/ws.c
 
-byteorder.o: /aup/c8/byteorder.c
-	$(CC) $(CFLAGS)  -c -o byteorder.o /aup/c8/byteorder.c
+sktex.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktex.c
+	$(CC) $(CFLAGS)  -c -o sktex.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktex.c
 
-sktex.o: /aup/c8/sktex.c
-	$(CC) $(CFLAGS)  -c -o sktex.o /aup/c8/sktex.c
+protoent.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/protoent.c
+	$(CC) $(CFLAGS)  -c -o protoent.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/protoent.c
 
-br.o: /aup/c8/br.c
-	$(CC) $(CFLAGS)  -c -o br.o /aup/c8/br.c
+sktexm.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexm.c
+	$(CC) $(CFLAGS)  -c -o sktexm.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexm.c
 
-uname.o: /aup/c8/uname.c
-	$(CC) $(CFLAGS)  -c -o uname.o /aup/c8/uname.c
+sktexdgmultmsg.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexdgmultmsg.c
+	$(CC) $(CFLAGS)  -c -o sktexdgmultmsg.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexdgmultmsg.c
 
-sktcl.o: /aup/c8/sktcl.c
-	$(CC) $(CFLAGS)  -c -o sktcl.o /aup/c8/sktcl.c
+sktcl.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktcl.c
+	$(CC) $(CFLAGS)  -c -o sktcl.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktcl.c
 
-sktopt.o: /aup/c8/sktopt.c
-	$(CC) $(CFLAGS)  -c -o sktopt.o /aup/c8/sktopt.c
+sktexdg.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexdg.c
+	$(CC) $(CFLAGS)  -c -o sktexdg.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/sktexdg.c
 
-sktexdg.o: /aup/c8/sktexdg.c
-	$(CC) $(CFLAGS)  -c -o sktexdg.o /aup/c8/sktexdg.c
+adi.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/adi.c
+	$(CC) $(CFLAGS)  -c -o adi.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/adi.c
 
-protoent.o: /aup/c8/protoent.c
-	$(CC) $(CFLAGS)  -c -o protoent.o /aup/c8/protoent.c
+uname.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/uname.c
+	$(CC) $(CFLAGS)  -c -o uname.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/uname.c
 
-miniws.o: /aup/c8/miniws.c
-	$(CC) $(CFLAGS)  -c -o miniws.o /aup/c8/miniws.c
+byteorder.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/byteorder.c
+	$(CC) $(CFLAGS)  -c -o byteorder.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/byteorder.c
 
-ssi.o: /aup/c8/ssi.c
-	$(CC) $(CFLAGS)  -c -o ssi.o /aup/c8/ssi.c
+ssi.o: /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/ssi.c
+	$(CC) $(CFLAGS)  -c -o ssi.o /home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming/c8/ssi.c
 
-all:  ws aupuname sktexdg byteorder adi sktexm br sktexdgmult sktcl sktex ndb miniws protoent sktexdgmultmsg minibr sktopt
+all:  sktex sktopt sktexm aupuname sktexdgmult sktexdgmultmsg ws br adi sktexdg miniws minibr sktcl protoent ndb byteorder
 clean:
-	rm  ws aupuname sktexdg byteorder adi sktexm br sktexdgmult sktcl sktex ndb miniws protoent sktexdgmultmsg minibr sktopt *.o
+	rm  sktex sktopt sktexm aupuname sktexdgmult sktexdgmultmsg ws br adi sktexdg miniws minibr sktcl protoent ndb byteorder *.o
