@@ -1,24 +1,43 @@
-Example Files from Advanced UNIX Programming, 2nd Edition.
+http://basepath.com/aup/compile.htm
 
-For compiling instructions, see www.basepath.com/aup.
-These files might not include all bug fixes and errata. See www.basepath.com/aup/Errata.htm for the latest info.
+step1:
+    touch makebuild
+    chmod 755 makebuild
 
-Copyright and Warranty
+step2:
+    add following content to makebuild
 
-This copyright notice applies only to example source code files ("Example Files") posted on this Web site that are from the book Advanced UNIX Programming, 2nd Edition. It's based on the BSD License.
+#!/bin/sh
+# On Solaris (and perhaps other systems), the command must be "nawk" instead
+# of "awk," or you must have /usr/xpg4/bin in your path before /usr/bin.
+#
+AUPSRC=/home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming
+export AUPSRC
+awk -f $AUPSRC/makebuild.awk $AUPSRC/$1/makebuild.spec >$AUPSRC/$1/Makefile
 
-This software is OSI Certified Open Source Software. OSI Certified is a certification mark of the Open Source Initiative.
+step3: download makebuild.awk
+    wget http://basepath.com/aup/download/makebuild.awk
 
-Copyright (c) 1985, 2003 by Marc J. Rochkind. All rights reserved.
+step4:
+    run following command to create the Makefile for directory c1:
+    ./makebuild c1
 
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+step5:
+    touch build_linux.sh
+    chmod 755 build_linux.sh
 
-* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+step6:
+    add following content to build.sh
 
-* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+#!/bin/sh
+AUPSRC=/home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming
+OS=LINUX
+LIBS="-lncurses -lutil"
+TLIBS="-pthread"
 
-* The name of the copyright holder, Marc J. Rochkind, may not be used to endorse or promote products derived from this software without specific prior written permission.
+export AUPSRC OS LIBS TLIBS
+make $2 -f $AUPSRC/$1/Makefile $3
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+step6:
+    ./build_linux.sh c1 timetst
 
-WARNING: Some of the Example Files contain errors that were put in deliberately for educational purposes, as explained in the book.
