@@ -1,5 +1,5 @@
 #!/bin/sh
-AUPSRC=/home/peiqzhen/github/Code_Learning/Advanced_Unix_Programming
+AUPSRC=$(cd ..&&/bin/pwd)
 OS=LINUX
 LIBS="-lncurses -lutil"
 TLIBS="-pthread"
