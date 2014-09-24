@@ -1,7 +1,7 @@
 #!/bin/sh
 AUPSRC=$(cd ..&&/bin/pwd)
 OS=LINUX
-LIBS="-lncurses -lutil"
+LIBS="-lncurses -lutil -lrt -lpthread"
 TLIBS="-pthread"
 
 export AUPSRC OS LIBS TLIBS
