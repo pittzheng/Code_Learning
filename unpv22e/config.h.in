@@ -6,7 +6,7 @@
 #undef	HAVE_MQUEUE_H				/* <mqueue.h> */
 #undef	HAVE_POLL_H				/* <poll.h> */
 #undef	HAVE_PTHREAD_H			/* <pthread.h> */
-#undef	HAVE_RPC_RPC_H			/* <rpc/rpc.h> */
+//#undef	HAVE_RPC_RPC_H			/* <rpc/rpc.h> */
 #undef	HAVE_SEMAPHORE_H			/* <semaphore.h> */
 #undef	HAVE_STRINGS_H			/* <strings.h> */
 #undef	HAVE_SYS_FILIO_H			/* <sys/filio.h> */

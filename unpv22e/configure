@@ -2909,9 +2909,9 @@ fi
 if test "$ac_cv_header_pthread_h" = yes ; then
    LIB_OBJS="$LIB_OBJS wrappthread.o"
 fi
-if test "$ac_cv_header_rpc_rpc_h" = yes ; then
-   LIB_OBJS="$LIB_OBJS wrapsunrpc.o"
-fi
+#if test "$ac_cv_header_rpc_rpc_h" = yes ; then
+#   LIB_OBJS="$LIB_OBJS wrapsunrpc.o"
+#fi
 LIB_OBJS="$LIB_OBJS wrapstdio.o"
 LIB_OBJS="$LIB_OBJS wrapunix.o"
 LIB_OBJS="$LIB_OBJS writable_timeo.o"
