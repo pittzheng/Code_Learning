@@ -24,6 +24,7 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <sys/resource.h>
 
 #if STD_UNIX_VERSION < SUV_SUS3
 #ifdef SOLARIS
