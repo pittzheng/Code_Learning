@@ -1,0 +1,13 @@
+1. for c1
+    1.1 ./makebuild c1
+    1.2 cd c1_output
+        ./build_linux.sh c1 timetst
+        ./build_linux.sh c1 all
+        ./build_linux.sh c1 clean
+2. for c2
+    2.1 ./makebuild c2
+    2.2 cd c2_output
+        ./build_linux.sh c2 trunc
+        ./build_linux.sh c2 all
+        ./build_linux.sh c2 clean
+for others, similar operations
