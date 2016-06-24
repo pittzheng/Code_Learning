@@ -1,0 +1,23 @@
+export CROSS_COMPILE = arm-linux-gnueabihf-
+
+obj-m := hello_export.o
+obj-m += hello_use_export.o
+
+PWD := $(shell pwd)
+
+KERNEL_DIR ?= /home/peiqzhen/Projects/merge/Alektrona/linux
+BUILD_DIR ?= $(KERNEL_DIR)/modules/lib/modules/3.2.0/build
+IFLAGS = -I$(KERNEL_DIR)/include -I$(KERNEL_DIR)/arch/arm/mach-omap2 -I$(KERNEL_DIR)/arch/arm/mach-omap2/include
+EXTRA_CFLAGS = $(IFLAGS)
+
+
+all:
+	$(MAKE) ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) -C $(BUILD_DIR) M=$(PWD) V=1 modules 
+
+clean:
+	$(RM) -rf *.o *.ko Module.symvers modules.order *.mod.c .*.cmd .tmp_versions .*.o.d
+
+# default:
+#         $(MAKE) -C $(KERNELDIR) M=$(PWD) modules 
+# clean:
+#         $(MAKE) -C $(KERNELDIR) M=$(PWD) clean
