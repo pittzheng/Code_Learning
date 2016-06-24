@@ -1,0 +1,6 @@
+This example depends on libnl
+please install it first with command: sudo apt-get install libnl-3-dev
+
+usage:
+1.kernel space: sudo insmod netlink_kernel.ko
+2.user space: sudo ./netlink_user

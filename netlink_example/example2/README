@@ -1,0 +1,7 @@
+This is an example without libnl
+This example works on Ubuntu 15.04 which's kernel is kernel 3.19.0-15.
+However, in ubuntu16.04, this example can not works well, the function 'genlmsg_multicast_allns()' will return -3 even the user space process 'netlink_user' do receive the msg. 
+
+usage:
+1.kernel space: sudo insmod netlink_kernel.ko
+2.user space: sudo ./netlink_user

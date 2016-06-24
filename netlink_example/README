@@ -1,0 +1,10 @@
+Example1: Kernel module take initiative to send message to user space with libnl-3 
+Example2: Kernel module take initiative to send message to user space without libnl-3 
+The reference URL is:
+http://stackoverflow.com/questions/35098943/can-kernel-module-take-initiative-to-send-message-to-user-space-with-netlink
+http://stackoverflow.com/questions/15937395/netlink-kernel-create-is-not-working-with-latest-linux-kernel
+
+Example3: simple example about netlink communication between user space and kernel space
+The reference URL is:
+http://stackoverflow.com/questions/3299386/how-to-use-netlink-socket-to-communicate-with-a-kernel-module
+

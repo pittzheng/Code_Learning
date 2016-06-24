@@ -1,0 +1,3 @@
+usage:
+1.sudo insmod netlink_kernel.ko
+2.sudo ./netlink_user
