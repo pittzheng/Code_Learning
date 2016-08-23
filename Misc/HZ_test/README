@@ -1,0 +1,3 @@
+//we can change cfag12864b_rate 
+sudo insmod HZ_test.ko cfag12864b_rate=40
+sudo rmmod HZ_test
