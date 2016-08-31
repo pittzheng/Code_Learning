@@ -1,0 +1,11 @@
+Tested on:
+root@Ubuntu-16-04:/sys/devices/platform/foo# uname -a
+Linux Ubuntu-16-04 4.4.0-31-generic #50-Ubuntu SMP Wed Jul 13 00:07:12 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+
+steps:
+1. make
+2. sudo insmod sysfs_drv.ko
+3. cd /sys/devices/platform/foo
+4. cat foobar
+5. echo 123 > foobar;cat foobar
+6. sudo rmmod sysfs_drv
