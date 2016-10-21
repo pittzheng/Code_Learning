@@ -1,0 +1,33 @@
+/sys dir structure:
+#####################################################################################
+#Case 1:
+$sudo insmod scbus.ko
+root@Ubuntu-16-04:/sys# ls bus/scbus/
+devices  drivers  drivers_autoprobe  drivers_probe  uevent  version
+root@Ubuntu-16-04:/sys# ls bus/scbus/devices/
+root@Ubuntu-16-04:/sys# ls bus/scbus/drivers
+
+#####################################################################################
+#Case 2:
+$sudo insmod scdevice.ko
+root@Ubuntu-16-04:/sys# ls bus/scbus/devices/
+root@Ubuntu-16-04:/sys# ls devices/scdevice/
+power  uevent
+$sudo rmmod scdevice.ko
+
+#####################################################################################
+#Case 3:
+$sudo insmod scbus_scdevice.ko
+root@Ubuntu-16-04:/sys# find . -name scd\*
+./bus/scbus/devices/scdevice
+./devices/scdevice
+root@Ubuntu-16-04:/sys# ls bus/scbus/devices/ -l
+total 0
+lrwxrwxrwx 1 root root 0 10月 21 16:28 scdevice -> ../../../devices/scdevice
+root@Ubuntu-16-04:/sys# ls devices/scdevice/
+power  subsystem  uevent
+root@Ubuntu-16-04:/sys# ls devices/scdevice/ -l
+total 0
+drwxr-xr-x 2 root root    0 10月 21 16:27 power
+lrwxrwxrwx 1 root root    0 10月 21 16:29 subsystem -> ../../bus/scbus
+-rw-r--r-- 1 root root 4096 10月 21 16:27 uevent
