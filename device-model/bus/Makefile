@@ -9,4 +9,4 @@ KDIR := /lib/modules/$(shell uname -r)/build
 all:
 	make -C $(KDIR) M=$(PWD) modules
 clean:
-	rm -fr *.ko *.o *.mod.o *.mod.c *.symvers *.order .scbus*
+	rm -fr *.ko *.o *.mod.o *.mod.c *.symvers *.order .scbus* .scdevice* .tmp_versions
