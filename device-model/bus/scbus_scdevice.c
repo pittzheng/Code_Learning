@@ -8,19 +8,19 @@
 
 extern struct bus_type scbus_type;
 
-static void scbus_release(struct device *dev)
+static void scbus_scdevice_release(struct device *dev)
 {
-	printk("scbus release\n");
+	printk("%s\n", __func__);
 }
 
 struct device scdevice = {
 	.init_name	= "scdevice",
-	.release	= scbus_release,
+	.release	= scbus_scdevice_release,
     .bus       = &scbus_type,
 };
 
 
-static int __init scbus_init(void)
+static int __init scbus_scdevice_init(void)
 {
 	int ret;
 
@@ -28,18 +28,18 @@ static int __init scbus_init(void)
 	if (ret)
 	    return -1;
 
-	printk("Create a scbus\n");
+	printk("%s\n", __func__);
 	return 0;
 }
 
-static void __exit scbus_exit(void)
+static void __exit scbus_scdevice_exit(void)
 {
 	device_unregister(&scdevice);
-	printk("Remove a scbus\n");
+	printk("%s\n", __func__);
 }
 
-module_init(scbus_init);
-module_exit(scbus_exit);
+module_init(scbus_scdevice_init);
+module_exit(scbus_scdevice_exit);
 
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("CJOK <cjok.liao@gmail.com>");

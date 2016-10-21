@@ -6,18 +6,18 @@
 #include <linux/kernel.h>
 #include <linux/device.h>
 
-static void scbus_release(struct device *dev)
+static void scdevice_release(struct device *dev)
 {
-	printk("scbus release\n");
+	printk("scdevice release\n");
 }
 
 struct device scdevice = {
 	.init_name	= "scdevice",
-	.release	= scbus_release,
+	.release	= scdevice_release,
 };
 
 
-static int __init scbus_init(void)
+static int __init scdevice_init(void)
 {
 	int ret;
 
@@ -25,18 +25,18 @@ static int __init scbus_init(void)
 	if (ret)
 	    return -1;
 
-	printk("Create a scbus\n");
+	printk("%s\n", __func__);
 	return 0;
 }
 
-static void __exit scbus_exit(void)
+static void __exit scdevice_exit(void)
 {
 	device_unregister(&scdevice);
-	printk("Remove a scbus\n");
+	printk("%s\n", __func__);
 }
 
-module_init(scbus_init);
-module_exit(scbus_exit);
+module_init(scdevice_init);
+module_exit(scdevice_exit);
 
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_AUTHOR("CJOK <cjok.liao@gmail.com>");
