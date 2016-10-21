@@ -1,0 +1,54 @@
+/sys dir structure:
+#####################################################################################
+#Step 1:
+$sudo insmod scclass.ko
+root@Ubuntu-16-04:/sys# ls class/scclass/
+version
+
+#####################################################################################
+#Step 2:
+$sudo insmod test_class.ko
+root@Ubuntu-16-04:/sys# ls class/test_class/
+version
+
+#####################################################################################
+#Step 3:
+$sudo insmod test_class_scdevice.ko
+root@Ubuntu-16-04:/sys# find . -name scd\*
+./devices/virtual/test_class/scdevice
+./class/test_class/scdevice
+root@Ubuntu-16-04:/sys# ls class/test_class/ -l
+total 0
+lrwxrwxrwx 1 root root    0 10月 21 17:16 scdevice -> ../../devices/virtual/test_class/scdevice
+-rw------- 1 root root 4096 10月 21 17:14 version
+root@Ubuntu-16-04:/sys# ls devices/virtual/test_class/scdevice/ -l
+total 0
+drwxr-xr-x 2 root root    0 10月 21 17:16 power
+lrwxrwxrwx 1 root root    0 10月 21 17:16 subsystem -> ../../../../class/test_class
+-rw-r--r-- 1 root root 4096 10月 21 17:16 uevent
+$sudo rmmod test_class_scdevice.ko
+#####################################################################################
+#Step 4:
+$sudo insmod test_class_parent_scdevice.ko
+root@Ubuntu-16-04:/sys# find . -name scd\*
+./devices/scdevice_parent
+./devices/scdevice_parent/test_class/scdevice
+./class/test_class/scdevice
+root@Ubuntu-16-04:/sys# ls class/test_class/ -l
+total 0
+lrwxrwxrwx 1 root root    0 10月 21 17:31 scdevice -> ../../devices/scdevice_parent/test_class/scdevice
+-rw------- 1 root root 4096 10月 21 17:31 version
+root@Ubuntu-16-04:/sys# ls devices/scdevice_parent/ -l
+total 0
+drwxr-xr-x 2 root root    0 10月 21 17:31 power
+drwxr-xr-x 3 root root    0 10月 21 17:30 test_class
+-rw-r--r-- 1 root root 4096 10月 21 17:30 uevent
+root@Ubuntu-16-04:/sys# ls devices/scdevice_parent/test_class/
+scdevice
+root@Ubuntu-16-04:/sys# ls devices/scdevice_parent/test_class/scdevice/ -l
+total 0
+lrwxrwxrwx 1 root root    0 10月 21 17:31 device -> ../../../scdevice_parent
+drwxr-xr-x 2 root root    0 10月 21 17:31 power
+lrwxrwxrwx 1 root root    0 10月 21 17:31 subsystem -> ../../../../class/test_class
+-rw-r--r-- 1 root root 4096 10月 21 17:31 uevent
+

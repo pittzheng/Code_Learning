@@ -8,8 +8,13 @@
 
 static char *Version = "revision 1.0, scclass";
 
-struct class *scclass;
-EXPORT_SYMBOL_GPL(scclass);
+struct class test_class=
+{
+    .name = "test_class",     //将类的名字设置为test-cla
+    .owner = THIS_MODULE,   //该类的拥有者为这个模块
+};
+
+EXPORT_SYMBOL_GPL(test_class);
 
 /*
 * export class attribute
@@ -21,16 +26,15 @@ static ssize_t class_show_version(struct class *class,
 }
 CLASS_ATTR(version, S_IRUSR | S_IWUSR, class_show_version, NULL);
 
-static int __init scclass_init(void)
+static int __init test_class_init(void)
 {
 	int err;
 
-	scclass = class_create(THIS_MODULE, "scclass");
-	err = PTR_ERR(scclass);
-	if (IS_ERR(scclass)) 
+	err = class_register(&test_class);
+	if (err)
 		return err;
 
-	err = class_create_file(scclass, &class_attr_version);
+	err = class_create_file(&test_class, &class_attr_version);
 	if (err)
 		goto err_class_create;
 
@@ -38,19 +42,19 @@ static int __init scclass_init(void)
 	return 0;
 
 err_class_create:
-	class_destroy(scclass);
+	class_unregister(&test_class);
 	return err;
 }
 
-static void __exit scclass_exit(void)
+static void __exit test_class_exit(void)
 {
-	class_remove_file(scclass, &class_attr_version);
-	class_destroy(scclass);
+	class_remove_file(&test_class, &class_attr_version);
+	class_unregister(&test_class);
 	printk("%s\n", __func__);
 }
 
-module_init(scclass_init);
-module_exit(scclass_exit);
+module_init(test_class_init);
+module_exit(test_class_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("CJOK <cjok.liao@gmail.com>");
