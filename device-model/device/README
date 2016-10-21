@@ -1,0 +1,45 @@
+/sys dir structure:
+#####################################################################################
+#Step 1:
+$ sudo insmod ../bus/scbus.ko
+root@Ubuntu-16-04:/sys# ls bus/scbus/
+devices  drivers  drivers_autoprobe  drivers_probe  uevent  version
+root@Ubuntu-16-04:/sys# ls bus/scbus/devices/
+root@Ubuntu-16-04:/sys# ls bus/scbus/drivers/
+
+#####################################################################################
+#Step 2:
+$ sudo insmod ../class/scclass.ko
+root@Ubuntu-16-04:/sys# ls class/scclass/
+version
+
+#####################################################################################
+#Step 3:
+$ sudo insmod scdevice.ko
+root@Ubuntu-16-04:/sys# find . -name scd\*
+./bus/scbus/devices/scdevice1
+./devices/virtual/scclass/scdevice2
+./devices/scdevice1
+./class/scclass/scdevice2
+./module/scbus/holders/scdevice
+./module/scclass/holders/scdevice
+./module/scdevice
+root@Ubuntu-16-04:/sys# ls bus/scbus/devices/ -l
+total 0
+lrwxrwxrwx 1 root root 0 10月 21 19:20 scdevice1 -> ../../../devices/scdevice1
+root@Ubuntu-16-04:/sys# ls devices/scdevice1/ -l
+total 0
+-r--r--r-- 1 root root 4096 10月 21 19:20 dev
+drwxr-xr-x 2 root root    0 10月 21 19:19 power
+lrwxrwxrwx 1 root root    0 10月 21 19:20 subsystem -> ../../bus/scbus
+-rw-r--r-- 1 root root 4096 10月 21 19:19 uevent
+-rw------- 1 root root 4096 10月 21 19:20 version
+root@Ubuntu-16-04:/sys# ls class/scclass/ -l
+total 0
+lrwxrwxrwx 1 root root    0 10月 21 19:21 scdevice2 -> ../../devices/virtual/scclass/scdevice2
+-rw------- 1 root root 4096 10月 21 19:18 version
+root@Ubuntu-16-04:/sys# ls devices/virtual/scclass/scdevice2/ -l
+total 0
+drwxr-xr-x 2 root root    0 10月 21 19:19 power
+lrwxrwxrwx 1 root root    0 10月 21 19:21 subsystem -> ../../../../class/scclass
+-rw-r--r-- 1 root root 4096 10月 21 19:19 uevent

@@ -1,12 +1,6 @@
-# this is for hello world
-
-OBJ_NAME := scdevice
-
-ifneq ($(KERNELRELEASE),)
-obj-m := $(OBJ_NAME).o
-else
-#KDIR := /home/cjok/arm6410/linux-2.6.32.36
-#KDIR := /home/cjok/arm6410/linux-2.6.36.4
+obj-m := scdevice.o
+obj-m += ../bus/scbus.o
+obj-m += ../class/scclass.o
 KDIR := /lib/modules/$(shell uname -r)/build
 
 .PHONY: all clean install
@@ -14,5 +8,6 @@ KDIR := /lib/modules/$(shell uname -r)/build
 all:
 	make -C $(KDIR) M=$(PWD) modules
 clean:
-	rm -fr *.ko *.o *.mod.o *.mod.c *.symvers *.order
-endif
+	rm -fr *.ko *.o *.mod.o *.mod.c *.symvers *.order .scdevice* .tmp_versions
+	make -C ../bus/ clean
+	make -C ../class/ clean
