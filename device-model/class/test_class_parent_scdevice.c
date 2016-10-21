@@ -51,8 +51,8 @@ exit:
 
 static void __exit test_class_parent_scdevice_exit(void)
 {
-	device_unregister(&scdevice_parent);
 	device_unregister(&scdevice);
+	device_unregister(&scdevice_parent);
 	printk("%s\n", __func__);
 }
 
