@@ -1,0 +1,15 @@
+/sys dir structure:
+#####################################################################################
+#Step 1:
+$ sudo insmod kobj-example.ko
+root@Ubuntu-16-04:/sys# ls kobj_example/ -l
+total 0
+-rw------- 1 root root 4096 10月 22 10:45 sc_example
+#####################################################################################
+#Step 2:
+$ sudo insmod kobject-example.ko
+root@Ubuntu-16-04:/sys# ls kernel/kobject_example/ -l
+total 0
+-rw------- 1 root root 4096 10月 22 10:46 bar
+-rw------- 1 root root 4096 10月 22 10:46 baz
+-rw-rw---- 1 root root 4096 10月 22 10:46 foo

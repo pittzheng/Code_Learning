@@ -23,7 +23,7 @@ static ssize_t sc_store(struct kobject *kobj,
 }
 
 static struct kobj_attribute sc_attrb = 
-	__ATTR(sc_example, 0666, sc_show, sc_store);
+	__ATTR(sc_example, S_IRUSR | S_IWUSR, sc_show, sc_store);
 
 static struct kobject *kobj;
 
