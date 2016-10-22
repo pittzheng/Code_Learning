@@ -1,0 +1,61 @@
+/sys dir structure:
+#####################################################################################
+#Step 1:
+$udevadm monitor --property
+#####################################################################################
+#Step 2:
+$ sudo insmod uevent_example.ko
+
+root@Ubuntu-16-04:/sys# ls devices/scdevice0/ -l
+total 0
+-r--r--r-- 1 root root 4096 10月 22 11:29 dev
+drwxr-xr-x 2 root root    0 10月 22 11:29 power
+-rw-r--r-- 1 root root 4096 10月 22 11:29 uevent
+-rw------- 1 root root 4096 10月 22 11:29 version
+root@Ubuntu-16-04:/sys# ls class/scclass/
+#####################################################################################
+#Step 3:
+root@Ubuntu-16-04:/sys# echo 1 > devices/scdevice0/version
+#uevent output:
+KERNEL[26955.717905] add      /devices/scdevice0/scclass/uevent_example_dev (scclass)
+    ACTION=add
+    DEVPATH=/devices/scdevice0/scclass/uevent_example_dev
+    FIRMWARE=uevent_example
+    SEQNUM=2209
+    SUBSYSTEM=scclass
+    TIMEOUT=60
+
+UDEV  [26955.719610] add      /devices/scdevice0/scclass/uevent_example_dev (scclass)
+    ACTION=add
+    DEVPATH=/devices/scdevice0/scclass/uevent_example_dev
+    FIRMWARE=uevent_example
+    SEQNUM=2209
+    SUBSYSTEM=scclass
+    TIMEOUT=60
+    USEC_INITIALIZED=26955719504
+
+#/sys dir structure
+root@Ubuntu-16-04:/sys# ls devices/scdevice0/ -l
+total 0
+-r--r--r-- 1 root root 4096 10月 22 11:29 dev
+drwxr-xr-x 2 root root    0 10月 22 11:29 power
+drwxr-xr-x 3 root root    0 10月 22 11:30 scclass
+-rw-r--r-- 1 root root 4096 10月 22 11:29 uevent
+-rw------- 1 root root 4096 10月 22 11:30 version
+root@Ubuntu-16-04:/sys# ls devices/scdevice0/scclass/ -l
+total 0
+drwxr-xr-x 3 root root 0 10月 22 11:30 uevent_example_dev
+root@Ubuntu-16-04:/sys# ls devices/scdevice0/scclass/uevent_example_dev/ -l
+total 0
+lrwxrwxrwx 1 root root    0 10月 22 11:31 device -> ../../../scdevice0
+drwxr-xr-x 2 root root    0 10月 22 11:31 power
+lrwxrwxrwx 1 root root    0 10月 22 11:31 subsystem -> ../../../../class/scclass
+-rw-r--r-- 1 root root 4096 10月 22 11:30 uevent
+
+root@Ubuntu-16-04:/sys# ls class/scclass/ -l
+total 0
+lrwxrwxrwx 1 root root 0 10月 22 11:31 uevent_example_dev -> ../../devices/scdevice0/scclass/uevent_example_dev
+#####################################################################################
+#Step 4:release kernel memory
+$root@Ubuntu-16-04:/sys# echo 0 > devices/scdevice0/version
+$sudo rmmod uevent_example.ko
