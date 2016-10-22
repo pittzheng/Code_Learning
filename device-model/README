@@ -1,0 +1,4 @@
+不要在struct device里对.bus和.class成员同时赋值，因为一个设备如果即是类设备又是总线设备,那么就会出错，因为先创建的subsystem用来链接类目录，接下来再创建它想要链接到总线目录内核就会报错
+sysfs: cannot create duplicate filename '/devices/platform/module_test/module_test/subsystem'
+
+ref:http://www.cnblogs.com/IrisZhou/archive/2013/05/24/3096795.html
