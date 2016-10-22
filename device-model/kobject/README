@@ -13,3 +13,5 @@ total 0
 -rw------- 1 root root 4096 10月 22 10:46 bar
 -rw------- 1 root root 4096 10月 22 10:46 baz
 -rw-rw---- 1 root root 4096 10月 22 10:46 foo
+
+ref: http://lxr.free-electrons.com/source/samples/kobject/kobject-example.c

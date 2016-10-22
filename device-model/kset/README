@@ -11,3 +11,5 @@ kset_example/
 └── soo
     ├── foo
     |__ soo
+
+ref:http://lxr.free-electrons.com/source/samples/kobject/kobject-example.c
