@@ -10,7 +10,7 @@ static char *Version = "revision 1.0, scdriver";
 
 static int sc_probe(struct device *dev)
 {
-	printk("driver found device\n");
+	printk("[%s][%s]:driver found device\n", __FILE__, __func__);
 	return 0;
 }
 
@@ -34,7 +34,8 @@ static ssize_t driver_show_version(struct device_driver *driver, char *buf)
 {
 	return sprintf(buf, "%s\n", Version);
 }
-static DRIVER_ATTR(version, S_IRUGO, driver_show_version, NULL);
+
+static DRIVER_ATTR(version, S_IRUSR | S_IWUSR, driver_show_version, NULL);
 
 static int __init scdriver_init(void)
 {

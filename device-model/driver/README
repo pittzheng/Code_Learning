@@ -1,0 +1,87 @@
+/sys dir structure:
+#####################################################################################
+#Step 1:
+sudo insmod ../bus/scbus.ko
+root@Ubuntu-16-04:/sys# ls bus/scbus/
+devices  drivers  drivers_autoprobe  drivers_probe  uevent  version
+root@Ubuntu-16-04:/sys# ls bus/scbus/devices/
+root@Ubuntu-16-04:/sys# ls bus/scbus/drivers/
+
+#####################################################################################
+#Step 2:
+sudo insmod scdriver.ko
+root@Ubuntu-16-04:/sys# find . -name scd\*
+./bus/scbus/drivers/scdevice0
+./module/scbus/holders/scdriver
+./module/scdriver
+root@Ubuntu-16-04:/sys# ls bus/scbus/drivers/ -l
+total 0
+drwxr-xr-x 2 root root 0 10月 22 10:04 scdevice0
+root@Ubuntu-16-04:/sys# ls bus/scbus/drivers/scdevice0/
+bind  uevent  unbind  version
+
+#####################################################################################
+#Step 3:
+$ sudo insmod scdevice.ko
+#case A: drivers_autoprobe is set to 1, scbus.match() function will be called, if their name matches, then scdriver.probe() function will be called.
+root@Ubuntu-16-04:/sys# find . -name scd\*
+./bus/scbus/devices/scdevice0
+./bus/scbus/drivers/scdevice0
+./bus/scbus/drivers/scdevice0/scdevice0
+./devices/scdevice0
+./module/scbus/holders/scdevice
+./module/scbus/holders/scdriver
+./module/scdevice
+./module/scdriver
+root@Ubuntu-16-04:/sys# ls -l bus/scbus/
+total 0
+drwxr-xr-x 2 root root    0 10月 22 10:11 devices
+drwxr-xr-x 3 root root    0 10月 22 10:04 drivers
+-rw-r--r-- 1 root root 4096 10月 22 10:02 drivers_autoprobe
+--w------- 1 root root 4096 10月 22 10:02 drivers_probe
+--w------- 1 root root 4096 10月 22 10:02 uevent
+-r--r--r-- 1 root root 4096 10月 22 10:02 version
+root@Ubuntu-16-04:/sys# ls -l bus/scbus/devices/
+total 0
+lrwxrwxrwx 1 root root 0 10月 22 10:11 scdevice0 -> ../../../devices/scdevice0
+root@Ubuntu-16-04:/sys# ls -l bus/scbus/devices/scdevice0/
+total 0
+lrwxrwxrwx 1 root root    0 10月 22 10:11 driver -> ../../bus/scbus/drivers/scdevice0
+drwxr-xr-x 2 root root    0 10月 22 10:11 power
+lrwxrwxrwx 1 root root    0 10月 22 10:11 subsystem -> ../../bus/scbus
+-rw-r--r-- 1 root root 4096 10月 22 10:11 uevent
+
+root@Ubuntu-16-04:/sys# ls bus/scbus/drivers/scdevice0/ -l
+total 0
+--w------- 1 root root 4096 10月 22 10:11 bind
+lrwxrwxrwx 1 root root    0 10月 22 10:11 scdevice0 -> ../../../../devices/scdevice0
+--w------- 1 root root 4096 10月 22 10:11 uevent
+--w------- 1 root root 4096 10月 22 10:11 unbind
+-rw------- 1 root root 4096 10月 22 10:11 version
+
+#case B: drivers_autoprobe is set to 0(# echo 0 > drivers_autoprobe), scbus.match() function will not be called.
+root@Ubuntu-16-04:/sys# find . -name scd\*
+./bus/scbus/devices/scdevice0
+./bus/scbus/drivers/scdevice0
+./devices/scdevice0
+./module/scbus/holders/scdevice
+./module/scbus/holders/scdriver
+./module/scdevice
+./module/scdriver
+root@Ubuntu-16-04:/sys# ls -l bus/scbus/devices/
+total 0
+lrwxrwxrwx 1 root root 0 10月 22 10:25 scdevice0 -> ../../../devices/scdevice0
+root@Ubuntu-16-04:/sys# ls -l bus/scbus/devices/scdevice0/
+total 0
+drwxr-xr-x 2 root root    0 10月 22 10:25 power
+lrwxrwxrwx 1 root root    0 10月 22 10:25 subsystem -> ../../bus/scbus
+-rw-r--r-- 1 root root 4096 10月 22 10:25 uevent
+root@Ubuntu-16-04:/sys# ls -l bus/scbus/drivers/
+total 0
+drwxr-xr-x 2 root root 0 10月 22 10:24 scdevice0
+root@Ubuntu-16-04:/sys# ls -l bus/scbus/drivers/scdevice0/
+total 0
+--w------- 1 root root 4096 10月 22 10:24 bind
+--w------- 1 root root 4096 10月 22 10:24 uevent
+--w------- 1 root root 4096 10月 22 10:24 unbind
+-rw------- 1 root root 4096 10月 22 10:24 version
