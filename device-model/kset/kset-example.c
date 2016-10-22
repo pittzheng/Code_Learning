@@ -93,13 +93,13 @@ static ssize_t soo_store(struct foo_obj *foo_obj, struct foo_attribute *attr,
 }
 
 static struct foo_attribute foo_attribute = 
-	__ATTR(foo, 0666, foo_show, foo_store);
+	__ATTR(foo, S_IRUSR | S_IWUSR, foo_show, foo_store);
 
 static struct foo_attribute soo_attribute = 
-	__ATTR(soo, 0666, soo_show, soo_store);
+	__ATTR(soo, S_IRUSR | S_IWUSR, soo_show, soo_store);
 
 static struct foo_attribute coo_attribute = 
-	__ATTR(coo, 0666, soo_show, soo_store);
+	__ATTR(coo, S_IRUSR | S_IWUSR, soo_show, soo_store);
 
 static struct attribute *foo_default_attrs[] = {
 	&foo_attribute.attr,

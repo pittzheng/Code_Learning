@@ -1,0 +1,13 @@
+/sys dir structure:
+#####################################################################################
+#Step 1:
+sudo insmod kset-example.ko
+root@Ubuntu-16-04:/sys# tree kset_example/ -L 2
+kset_example/
+├── foo
+│   ├── coo
+│   ├── foo
+│   └── soo
+└── soo
+    ├── foo
+    |__ soo
