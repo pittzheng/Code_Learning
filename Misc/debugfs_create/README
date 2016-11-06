@@ -1,0 +1,10 @@
+Tested on:
+root@Ubuntu-16-04:# uname -a
+Linux Ubuntu-16-04 4.4.0-31-generic #50-Ubuntu SMP Wed Jul 13 00:07:12 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+
+steps:
+1. make
+2. sudo insmod debugfs_create.ko
+3. cd /sys/kernel/debug/foo_debug
+4. cat foo_version
+5. sudo rmmod debugfs_create.ko
